@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import { Mail, MapPin, Phone } from 'lucide-react';
+import footerLogo from '@/assets/sampanna.jpg';
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -10,7 +11,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
-            <h3 className="font-heading text-2xl font-bold mb-4">LUXE</h3>
+            <img src={footerLogo} alt="Sampanna Footer Logo" className="h-20 w-auto object-contain mb-4 rounded-sm" />
             <p className="text-primary-foreground/70 text-sm leading-relaxed">
               Curated fashion for the modern lifestyle. Quality, style, and comfort.
             </p>

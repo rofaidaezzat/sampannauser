@@ -3,6 +3,7 @@ import { ShoppingBag, Search, Globe, Menu, X } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { useState } from 'react';
+import logo from '@/assets/sampanna-removebg-preview.png';
 
 const Navbar = () => {
   const { totalItems } = useCart();
@@ -13,10 +14,10 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-24">
           {/* Logo */}
-          <Link to="/" className="font-heading text-2xl font-bold tracking-tight text-foreground">
-            LUXE
+          <Link to="/" className="flex items-center -ml-4 md:-ml-8">
+            <img src={logo} alt="Sampanna Logo" className="h-20 sm:h-28 w-auto object-contain scale-125 transform origin-left" />
           </Link>
 
           {/* Desktop Nav */}
