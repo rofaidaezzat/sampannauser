@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import Watsapp from "@/components/Watsapp/Watsapp";
 import Index from "./pages/Index";
 import Categories from "./pages/Categories";
 import ProductDetails from "./pages/ProductDetails";
@@ -28,6 +29,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <ScrollToTop />
+            <Watsapp />
             <Navbar />
             <main className="min-h-screen">
               <Routes>

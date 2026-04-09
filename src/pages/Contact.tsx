@@ -34,7 +34,7 @@ const Contact = () => {
                 <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                   <Mail size={22} className="text-secondary" />
                 </div>
-                <span className="text-lg font-medium">info@luxe.com</span>
+                <span className="text-lg font-medium">evristclimber@gmail.com</span>
               </div>
               <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
                 <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
