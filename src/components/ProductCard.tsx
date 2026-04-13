@@ -20,7 +20,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="mt-3 space-y-1">
         <p className="text-xs text-muted-foreground uppercase tracking-wider">{product.category}</p>
         <h3 className="font-body text-sm font-medium text-foreground">{product.name}</h3>
-        <p className="text-sm font-semibold text-foreground">${product.price}</p>
+        <p className="text-sm font-semibold text-foreground">{product.price} EGP</p>
       </div>
     </Link>
   );

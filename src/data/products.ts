@@ -84,8 +84,7 @@ export const products: Product[] = [
 ];
 
 export const categories = [
-  { name: 'Women', image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&h=600&fit=crop', count: 124 },
-  { name: 'Men', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=600&fit=crop', count: 98 },
-  { name: 'Kids', image: 'https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=500&h=600&fit=crop', count: 67 },
-  { name: 'Accessories', image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=500&h=600&fit=crop', count: 45 },
+  { name: 'women', image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&h=600&fit=crop', count: 124 },
+  { name: 'men', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=600&fit=crop', count: 98 },
+  { name: 'kides', image: 'https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=500&h=600&fit=crop', count: 67 },
 ];

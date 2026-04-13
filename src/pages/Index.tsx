@@ -43,7 +43,7 @@ const Index = () => {
       {/* Categories */}
       <section className="container mx-auto px-4 py-20">
         <h2 className="section-heading text-center mb-12">{t('shopByCategory')}</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {categories.map((cat) => (
             <Link key={cat.name} to={`/categories?cat=${cat.name}`} className="group relative overflow-hidden aspect-[3/4]">
               <img src={cat.image} alt={cat.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />

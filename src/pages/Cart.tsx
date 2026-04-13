@@ -28,7 +28,7 @@ const Cart = () => {
               <div className="flex-1">
                 <h3 className="font-medium text-foreground">{item.product.name}</h3>
                 <p className="text-sm text-muted-foreground">{item.size} / {item.color}</p>
-                <p className="font-semibold text-foreground mt-1">${item.product.price}</p>
+                <p className="font-semibold text-foreground mt-1">{item.product.price} EGP</p>
                 <div className="flex items-center gap-3 mt-3">
                   <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="w-8 h-8 border border-border flex items-center justify-center text-foreground hover:bg-muted">
                     <Minus size={14} />
@@ -51,7 +51,7 @@ const Cart = () => {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between text-muted-foreground">
               <span>Subtotal</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>{totalPrice.toFixed(2)} EGP</span>
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span>Shipping</span>
@@ -59,7 +59,7 @@ const Cart = () => {
             </div>
             <div className="border-t border-border pt-3 flex justify-between font-semibold text-foreground text-base">
               <span>{t('total')}</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>{totalPrice.toFixed(2)} EGP</span>
             </div>
           </div>
           <Link to="/checkout" className="btn-shop w-full mt-6 block text-center">{t('checkout')}</Link>

@@ -192,7 +192,7 @@ const Checkout = () => {
                   <p className="text-muted-foreground">{item.size} / {item.color}</p>
                   <p className="text-muted-foreground">Qty: {item.quantity}</p>
                 </div>
-                <p className="font-semibold">${(item.product.price * item.quantity).toFixed(2)}</p>
+                <p className="font-semibold">{(item.product.price * item.quantity).toFixed(2)} EGP</p>
               </div>
             ))}
           </div>
@@ -200,7 +200,7 @@ const Checkout = () => {
           <div className="space-y-3 text-sm border-t border-border pt-4">
             <div className="flex justify-between text-muted-foreground">
               <span>Subtotal</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>{totalPrice.toFixed(2)} EGP</span>
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span>Shipping</span>
@@ -208,7 +208,7 @@ const Checkout = () => {
             </div>
             <div className="border-t border-border pt-3 flex justify-between font-semibold text-foreground text-base">
               <span>{t('total')}</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>{totalPrice.toFixed(2)} EGP</span>
             </div>
           </div>
         </div>
