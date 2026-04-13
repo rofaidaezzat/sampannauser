@@ -1,18 +1,33 @@
 import { useParams, Link } from 'react-router-dom';
-import { products } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ShoppingBag, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { Product } from '@/context/CartContext';
+import { getProducts } from '@/lib/api';
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const product = products.find(p => p.id === Number(id));
   const { addToCart } = useCart();
   const { t } = useLanguage();
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        const products = await getProducts();
+        const selected = products.find((item) => item.id === id) || null;
+        setProduct(selected);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadProduct();
+  }, [id]);
 
   if (!product) {
     return (

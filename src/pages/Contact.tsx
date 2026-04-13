@@ -3,15 +3,27 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import ContactBg from '@/assets/contact-bg.png';
+import { createContact } from '@/lib/api';
 
 const Contact = () => {
   const { t } = useLanguage();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Message sent successfully!');
-    setForm({ name: '', email: '', message: '' });
+
+    try {
+      setIsSubmitting(true);
+      await createContact(form);
+      toast.success('Message sent successfully!');
+      setForm({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,7 +89,9 @@ const Contact = () => {
             rows={5}
             className="w-full px-4 py-3 bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-secondary resize-none"
           />
-          <button type="submit" className="btn-shop w-full">{t('sendMessage')}</button>
+          <button type="submit" disabled={isSubmitting} className="btn-shop w-full disabled:opacity-70 disabled:cursor-not-allowed">
+            {isSubmitting ? 'Sending...' : t('sendMessage')}
+          </button>
         </form>
       </div>
     </div>

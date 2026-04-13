@@ -2,7 +2,7 @@ import { Product } from '@/context/CartContext';
 
 export const products: Product[] = [
   {
-    id: 1,
+    id: '1',
     name: 'Classic Blazer',
     price: 189,
     image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop',
@@ -12,7 +12,7 @@ export const products: Product[] = [
     colors: ['Black', 'Beige', 'Navy'],
   },
   {
-    id: 2,
+    id: '2',
     name: 'Silk Midi Dress',
     price: 245,
     image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=800&fit=crop',
@@ -22,7 +22,7 @@ export const products: Product[] = [
     colors: ['Cream', 'Blush', 'Black'],
   },
   {
-    id: 3,
+    id: '3',
     name: 'Tailored Trousers',
     price: 120,
     image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop',
@@ -32,7 +32,7 @@ export const products: Product[] = [
     colors: ['Black', 'Camel', 'Grey'],
   },
   {
-    id: 4,
+    id: '4',
     name: 'Linen Shirt',
     price: 95,
     image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&h=800&fit=crop',
@@ -42,7 +42,7 @@ export const products: Product[] = [
     colors: ['White', 'Sky Blue', 'Sage'],
   },
   {
-    id: 5,
+    id: '5',
     name: 'Wool Overcoat',
     price: 350,
     image: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=600&h=800&fit=crop',
@@ -52,7 +52,7 @@ export const products: Product[] = [
     colors: ['Charcoal', 'Camel', 'Navy'],
   },
   {
-    id: 6,
+    id: '6',
     name: 'Cashmere Sweater',
     price: 210,
     image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&h=800&fit=crop',
@@ -62,7 +62,7 @@ export const products: Product[] = [
     colors: ['Ivory', 'Dusty Rose', 'Grey'],
   },
   {
-    id: 7,
+    id: '7',
     name: 'Denim Jacket',
     price: 135,
     image: 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=600&h=800&fit=crop',
@@ -72,7 +72,7 @@ export const products: Product[] = [
     colors: ['Light Wash', 'Dark Wash'],
   },
   {
-    id: 8,
+    id: '8',
     name: 'Cotton T-Shirt',
     price: 45,
     image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=800&fit=crop',

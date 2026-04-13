@@ -1,11 +1,28 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import ProductCard from '@/components/ProductCard';
-import { products, categories } from '@/data/products';
+import { categories } from '@/data/products';
 import heroBanner from '@/assets/hero-banner.jpg';
+import { useEffect, useState } from 'react';
+import { Product } from '@/context/CartContext';
+import { getProducts } from '@/lib/api';
 
 const Index = () => {
   const { t } = useLanguage();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   return (
     <div>

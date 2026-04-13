@@ -1,18 +1,31 @@
 import { useLanguage } from '@/context/LanguageContext';
 import ProductCard from '@/components/ProductCard';
-import { products, categories } from '@/data/products';
-import { useState } from 'react';
+import { categories } from '@/data/products';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Product } from '@/context/CartContext';
+import { getProducts } from '@/lib/api';
 
 const Categories = () => {
   const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialCat = searchParams.get('cat') || 'All';
   const [selectedCategory, setSelectedCategory] = useState(initialCat);
+  const [filtered, setFiltered] = useState<Product[]>([]);
 
-  const filtered = selectedCategory === 'All'
-    ? products
-    : products.filter(p => p.category === selectedCategory);
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const category = selectedCategory === 'All' ? undefined : selectedCategory;
+        const data = await getProducts(category);
+        setFiltered(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadProducts();
+  }, [selectedCategory]);
 
   return (
     <div className="container mx-auto px-4 py-12">

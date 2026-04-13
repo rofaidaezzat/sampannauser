@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { toast } from 'sonner';
+import { createOrder } from '@/lib/api';
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -16,6 +17,7 @@ const Checkout = () => {
     city: '',
     phone: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (items.length === 0) {
     navigate('/cart');
@@ -27,14 +29,59 @@ const Checkout = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would send this data to a backend API
-    console.log('Order Data:', { ...formData, items, total: totalPrice });
-    
-    toast.success('Order placed successfully!');
-    clearCart();
-    navigate('/');
+
+    const groupedByProduct = new Map<
+      string,
+      {
+        product: string;
+        price: number;
+        variations: Array<{ quantity: number; size: string; color: string }>;
+      }
+    >();
+
+    items.forEach((item) => {
+      if (!groupedByProduct.has(item.product.id)) {
+        groupedByProduct.set(item.product.id, {
+          product: item.product.id,
+          price: item.product.price,
+          variations: [],
+        });
+      }
+
+      groupedByProduct.get(item.product.id)?.variations.push({
+        quantity: item.quantity,
+        size: item.size,
+        color: item.color,
+      });
+    });
+
+    try {
+      setIsSubmitting(true);
+      await createOrder({
+        userInfo: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+        },
+        cartItems: Array.from(groupedByProduct.values()),
+        shippingAddress: {
+          city: formData.city,
+          district: formData.city,
+          details: formData.address,
+        },
+      });
+
+      toast.success('Order placed successfully!');
+      clearCart();
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to place order. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -126,8 +173,8 @@ const Checkout = () => {
                 />
               </div>
             </div>
-            <button type="submit" className="btn-shop w-full mt-6">
-              Place Order
+            <button type="submit" disabled={isSubmitting} className="btn-shop w-full mt-6 disabled:opacity-70 disabled:cursor-not-allowed">
+              {isSubmitting ? 'Placing Order...' : 'Place Order'}
             </button>
           </form>
         </div>
