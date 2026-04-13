@@ -72,16 +72,26 @@ const parseStringArray = (value: string[] | undefined): string[] => {
   return value.map((item) => item.trim()).filter(Boolean);
 };
 
-const normalizeProduct = (product: ApiProduct): Product => ({
+const parseImageArray = (value: string[] | undefined): string[] => {
+  const parsed = parseStringArray(value);
+  return parsed.filter(Boolean);
+};
+
+const normalizeProduct = (product: ApiProduct): Product => {
+  const images = parseImageArray(product.images);
+
+  return {
   id: product._id,
   name: product.name,
   description: product.description,
   price: product.price,
-  image: product.images?.[0] || '',
+  image: images[0] || '',
+  images,
   category: product.category,
   sizes: parseStringArray(product.sizes),
   colors: parseStringArray(product.colors),
-});
+  };
+};
 
 export const getProducts = async (category?: string): Promise<Product[]> => {
   const query = category ? `?category=${encodeURIComponent(category)}` : '';

@@ -12,6 +12,7 @@ const ProductDetails = () => {
   const { addToCart } = useCart();
   const { t } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
+  const [selectedImage, setSelectedImage] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
 
@@ -21,6 +22,7 @@ const ProductDetails = () => {
         const products = await getProducts();
         const selected = products.find((item) => item.id === id) || null;
         setProduct(selected);
+        setSelectedImage(selected?.images?.[0] || selected?.image || '');
       } catch (error) {
         console.error(error);
       }
@@ -38,6 +40,8 @@ const ProductDetails = () => {
     );
   }
 
+  const galleryImages = product.images && product.images.length > 0 ? Array.from(new Set(product.images)) : [product.image];
+
   const handleAddToCart = () => {
     const size = selectedSize || product.sizes[0];
     const color = selectedColor || product.colors[0];
@@ -52,8 +56,25 @@ const ProductDetails = () => {
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="aspect-[3/4] overflow-hidden bg-muted">
-          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+        <div>
+          <div className="aspect-[3/4] overflow-hidden bg-muted">
+            <img src={selectedImage || product.image} alt={product.name} className="w-full h-full object-cover" />
+          </div>
+
+          {galleryImages.length > 1 && (
+            <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
+              {galleryImages.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  type="button"
+                  onClick={() => setSelectedImage(image)}
+                  className={`aspect-[3/4] w-20 shrink-0 overflow-hidden border ${selectedImage === image ? 'border-primary ring-1 ring-primary' : 'border-border'}`}
+                >
+                  <img src={image} alt={`${product.name}-${index + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col justify-center space-y-6">
