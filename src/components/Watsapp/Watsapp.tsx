@@ -3,7 +3,7 @@ const Watsapp = () => {
   return (
     <div className="fixed bottom-6 left-6 z-[1000]">
       <a
-        href="https://wa.me/201025202354"
+        href="https://wa.me/201111530022"
         target="_blank"
         rel="noopener noreferrer"
         className="Btn"
