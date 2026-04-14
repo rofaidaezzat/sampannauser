@@ -52,13 +52,13 @@ const Contact = () => {
                 <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                   <Phone size={22} className="text-secondary" />
                 </div>
-                <span className="text-lg font-medium">+1 234 567 890</span>
+                <span className="text-lg font-medium">01111530022</span>
               </div>
               <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
                 <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                   <MapPin size={22} className="text-secondary" />
                 </div>
-                <span className="text-lg font-medium">123 Fashion Ave, New York, NY 10001</span>
+                <span className="text-lg font-medium">الإسماعيلية</span>
               </div>
             </div>
           </div>

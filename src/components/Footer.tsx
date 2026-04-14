@@ -29,8 +29,8 @@ const Footer = () => {
             <h4 className="font-semibold text-sm uppercase tracking-wider mb-4">Contact</h4>
             <div className="flex flex-col gap-3 text-sm text-primary-foreground/70">
               <span className="flex items-center gap-2"><Mail size={14} /> evristclimber@gmail.com</span>
-              <span className="flex items-center gap-2"><Phone size={14} /> +1 234 567 890</span>
-              <span className="flex items-center gap-2"><MapPin size={14} /> New York, NY</span>
+              <span className="flex items-center gap-2"><Phone size={14} /> 01111530022</span>
+              <span className="flex items-center gap-2"><MapPin size={14} /> الإسماعيلية</span>
             </div>
           </div>
           <div>
