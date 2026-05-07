@@ -1,15 +1,39 @@
 import { useLanguage } from '@/context/LanguageContext';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ContactBg from '@/assets/contact-bg.png';
-import { createContact } from '@/lib/api';
-
+import { createContact, getSettings } from '@/lib/api';
+interface ContactData {
+  phone: string;
+  email: string;
+  address: string;
+}
 const Contact = () => {
   const { t } = useLanguage();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+
+const [contactData, setContactData] = useState<ContactData | null>(null);
+
+useEffect(() => {
+  const loadContact = async () => {
+    try {
+      const data = await getSettings();
+
+      setContactData({
+        phone: data.contact.phone,
+        email: data.contact.email,
+        address: data.contact.address,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadContact();
+}, []);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -41,26 +65,42 @@ const Contact = () => {
             <p className="text-white/90 leading-relaxed text-lg">
               We'd love to hear from you. Whether you have a question about our products, sizing, or anything else — our team is ready to help.
             </p>
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
-                <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                  <Mail size={22} className="text-secondary" />
-                </div>
-                <span className="text-lg font-medium">evristclimber@gmail.com</span>
-              </div>
-              <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
-                <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                  <Phone size={22} className="text-secondary" />
-                </div>
-                <span className="text-lg font-medium">01111530022</span>
-              </div>
-              <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
-                <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                  <MapPin size={22} className="text-secondary" />
-                </div>
-                <span className="text-lg font-medium">الإسماعيلية</span>
-              </div>
-            </div>
+           <div className="space-y-6">
+  
+  {/* Email */}
+  <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
+    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+      <Mail size={22} className="text-secondary" />
+    </div>
+
+    <span className="text-lg font-medium">
+      {contactData?.email ?? 'evristclimber@gmail.com'}
+    </span>
+  </div>
+
+  {/* Phone */}
+  <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
+    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+      <Phone size={22} className="text-secondary" />
+    </div>
+
+    <span className="text-lg font-medium">
+      {contactData?.phone ?? '01111530022'}
+    </span>
+  </div>
+
+  {/* Address */}
+  <div className="flex items-center gap-4 text-white hover:translate-x-2 transition-transform duration-300">
+    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+      <MapPin size={22} className="text-secondary" />
+    </div>
+
+    <span className="text-lg font-medium">
+      {contactData?.address ?? 'الإسماعيلية'}
+    </span>
+  </div>
+
+</div>
           </div>
         </div>
 

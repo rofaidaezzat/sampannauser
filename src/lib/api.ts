@@ -1,7 +1,44 @@
 import { Product } from '@/context/CartContext';
 
 const BASE_URL = 'https://sampanna-iota.vercel.app';
+interface Settings {
+  home: {
+    cover_title: string;
+    cover_description: string;
+    cover_image: string;
+  };
+  category: {
+    men_image: string;
+    women_image: string;
+    kids_image: string;
+  };
+  footer: {
+    logo_description: string;
+  };
+  contact: {
+    phone: string;
+    email: string;
+    address: string;
+  };
+  about_us: {
+    title: string;
+    description_1: string;
+    description_2: string;
+    image: string;
+    analytics: Array<{ label: string; value: string }>;
+  };
+  social_media: {
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+  };
+  rights_reserved: string;
+}
 
+interface SettingsResponse {
+  data: Settings;
+}
 interface ApiProduct {
   _id: string;
   name: string;
@@ -81,15 +118,15 @@ const normalizeProduct = (product: ApiProduct): Product => {
   const images = parseImageArray(product.images);
 
   return {
-  id: product._id,
-  name: product.name,
-  description: product.description,
-  price: product.price,
-  image: images[0] || '',
-  images,
-  category: product.category,
-  sizes: parseStringArray(product.sizes),
-  colors: parseStringArray(product.colors),
+    id: product._id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    image: images[0] || '',
+    images,
+    category: product.category,
+    sizes: parseStringArray(product.sizes),
+    colors: parseStringArray(product.colors),
   };
 };
 
@@ -131,4 +168,12 @@ export const createContact = async (payload: ContactPayload): Promise<void> => {
   if (!response.ok) {
     throw new Error('Failed to send contact message');
   }
+};
+export const getSettings = async (): Promise<Settings> => {
+  const response = await fetch(`${BASE_URL}/api/v1/settings`);
+  if (!response.ok) {
+    throw new Error('Failed to load settings');
+  }
+  const payload: SettingsResponse = await response.json();
+  return payload.data;
 };
