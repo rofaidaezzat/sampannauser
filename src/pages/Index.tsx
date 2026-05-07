@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import ProductCard from '@/components/ProductCard';
-import { categories } from '@/data/products';
+
 import heroBanner from '@/assets/hero-banner.jpg';
 import { useEffect, useState } from 'react';
 import { Product } from '@/context/CartContext';
 import { getProducts, getSettings } from '@/lib/api';
+import { categories } from '@/data/products';
 
 interface HomeSettings {
   cover_title: string;
@@ -49,15 +50,21 @@ const Index = () => {
     loadSettings();
   }, []);
 
-  // Map API category images onto local categories array by name
-  const getCategoryImage = (catName: string, fallback: string): string => {
-    if (!categorySettings) return fallback;
-    const key = catName.toLowerCase();
-    if (key === 'men') return categorySettings.men_image;
-    if (key === 'women') return categorySettings.women_image;
-    if (key === 'kids') return categorySettings.kids_image;
-    return fallback;
-  };
+const getCategoryImage = (catName: string, fallback: string): string => {
+  if (!categorySettings) return fallback;
+  console.log("men_image",categorySettings.men_image);
+  console.log("women_image",categorySettings.women_image);
+  console.log("kids_image",categorySettings.kids_image);
+  const key = catName.toLowerCase();
+  
+  let apiImage = '';
+  if (key === 'men') apiImage = categorySettings.men_image;
+  else if (key === 'women') apiImage = categorySettings.women_image;
+  else if (key === 'kides') apiImage = categorySettings.kids_image;
+
+  // Return fallback if API image is empty or invalid
+  return apiImage && apiImage.startsWith('http') ? apiImage : fallback;
+};
 
   return (
     <div>
@@ -99,12 +106,17 @@ const Index = () => {
               to={`/categories?cat=${cat.name}`}
               className="group relative overflow-hidden aspect-[3/4]"
             >
-              <img
-                src={getCategoryImage(cat.name, cat.image)}
-                alt={cat.name}
-                loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
+             <img
+  src={getCategoryImage(cat.name, cat.image)}
+  alt={cat.name}
+  loading="lazy"
+  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+  onError={(e) => {
+    const target = e.currentTarget;
+    target.onerror = null; // prevent infinite loop
+    target.src = cat.image; // fall back to local image
+  }}
+/>
               <div className="absolute inset-0 bg-foreground/30 group-hover:bg-foreground/40 transition-colors" />
               <div className="absolute bottom-6 left-6">
                 <h3 className="text-primary-foreground font-heading text-xl font-semibold">{cat.name}</h3>
