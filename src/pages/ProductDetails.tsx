@@ -81,6 +81,14 @@ const ProductDetails = () => {
           <p className="text-sm text-muted-foreground uppercase tracking-wider">{product.category}</p>
           <h1 className="font-heading text-4xl font-bold text-foreground">{product.name}</h1>
           <p className="text-2xl font-semibold text-foreground">{product.price} EGP</p>
+          {/* Stock */}
+          <p className={`text-sm font-medium ${product.stock === 0 ? 'text-red-500' : product.stock <= 10 ? 'text-orange-500' : 'text-green-600'}`}>
+            {product.stock === 0
+              ? 'Out of Stock'
+              : product.stock <= 10
+                ? `Only ${product.stock} left in stock`
+                : `In Stock (${product.stock} available)`}
+          </p>
           <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
           {/* Size */}

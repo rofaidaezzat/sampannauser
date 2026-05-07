@@ -44,6 +44,7 @@ interface ApiProduct {
   name: string;
   description: string;
   price: number;
+  stock: number;
   category: string;
   sizes: string[];
   colors: string[];
@@ -124,6 +125,7 @@ const normalizeProduct = (product: ApiProduct): Product => {
     price: product.price,
     image: images[0] || '',
     images,
+    stock: product.stock,
     category: product.category,
     sizes: parseStringArray(product.sizes),
     colors: parseStringArray(product.colors),
