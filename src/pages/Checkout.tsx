@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { toast } from 'sonner';
-import { createOrder } from '@/lib/api';
+import { createOrder, getShippingPrice } from '@/lib/api';
+import { EGYPT_CITIES } from '@/lib/constants';
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -18,15 +19,29 @@ const Checkout = () => {
     phone: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [shippingPrice, setShippingPrice] = useState<number | null>(null);
+  const [isFetchingShipping, setIsFetchingShipping] = useState(false);
 
   if (items.length === 0) {
     navigate('/cart');
     return null;
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+
+    if (name === 'city' && value) {
+      setIsFetchingShipping(true);
+      try {
+        const price = await getShippingPrice(value);
+        setShippingPrice(price);
+      } catch {
+        setShippingPrice(null);
+      } finally {
+        setIsFetchingShipping(false);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -152,12 +167,9 @@ const Checkout = () => {
                   className="w-full p-2 border border-border bg-background focus:ring-1 focus:ring-ring outline-none cursor-pointer"
                 >
                   <option value="" disabled>Select a city</option>
-                  <option value="Cairo">Cairo</option>
-                  <option value="Alexandria">Alexandria</option>
-                  <option value="Giza">Giza</option>
-                  <option value="Mansoura">Mansoura</option>
-                  <option value="Port Said">Port Said</option>
-                  <option value="Other">Other</option>
+                  {EGYPT_CITIES.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -206,11 +218,19 @@ const Checkout = () => {
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span>Shipping</span>
-              <span>Free</span>
+              <span>
+                {isFetchingShipping
+                  ? 'Calculating...'
+                  : shippingPrice === null
+                  ? formData.city ? 'N/A' : '—'
+                  : shippingPrice === 0
+                  ? 'Free'
+                  : `${shippingPrice.toFixed(2)} EGP`}
+              </span>
             </div>
             <div className="border-t border-border pt-3 flex justify-between font-semibold text-foreground text-base">
               <span>{t('total')}</span>
-              <span>{totalPrice.toFixed(2)} EGP</span>
+              <span>{(totalPrice + (shippingPrice ?? 0)).toFixed(2)} EGP</span>
             </div>
           </div>
         </div>

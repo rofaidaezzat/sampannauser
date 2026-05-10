@@ -144,6 +144,20 @@ export const getProducts = async (category?: string): Promise<Product[]> => {
   return (payload.data || []).map(normalizeProduct);
 };
 
+export const getShippingPrice = async (city: string): Promise<number> => {
+  const response = await fetch(
+    `${BASE_URL}/api/v1/orders/shipping-price?city=${encodeURIComponent(city)}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch shipping price');
+  }
+
+  const data = await response.json();
+  // API returns { data: { priceBeforeVat, vat, priceAfterVat } }
+  return data?.data?.priceAfterVat ?? 0;
+};
+
 export const createOrder = async (payload: CreateOrderPayload): Promise<void> => {
   const response = await fetch(`${BASE_URL}/api/v1/orders`, {
     method: 'POST',

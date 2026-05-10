@@ -53,10 +53,7 @@ const Cart = () => {
               <span>Subtotal</span>
               <span>{totalPrice.toFixed(2)} EGP</span>
             </div>
-            <div className="flex justify-between text-muted-foreground">
-              <span>Shipping</span>
-              <span>Free</span>
-            </div>
+
             <div className="border-t border-border pt-3 flex justify-between font-semibold text-foreground text-base">
               <span>{t('total')}</span>
               <span>{totalPrice.toFixed(2)} EGP</span>
