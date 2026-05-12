@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { useEffect, useState } from 'react';
-import { ShoppingBag, ArrowLeft } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ShoppingBag, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Product } from '@/context/CartContext';
 import { getProducts } from '@/lib/api';
@@ -15,6 +15,7 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const thumbnailRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -42,6 +43,12 @@ const ProductDetails = () => {
 
   const galleryImages = product.images && product.images.length > 0 ? Array.from(new Set(product.images)) : [product.image];
 
+  const scrollThumbnails = (direction: 'left' | 'right') => {
+    if (thumbnailRef.current) {
+      thumbnailRef.current.scrollBy({ left: direction === 'left' ? -100 : 100, behavior: 'smooth' });
+    }
+  };
+
   const handleAddToCart = () => {
     const size = selectedSize || product.sizes[0];
     const color = selectedColor || product.colors[0];
@@ -62,17 +69,46 @@ const ProductDetails = () => {
           </div>
 
           {galleryImages.length > 1 && (
-            <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
-              {galleryImages.map((image, index) => (
-                <button
-                  key={`${image}-${index}`}
-                  type="button"
-                  onClick={() => setSelectedImage(image)}
-                  className={`aspect-[3/4] w-20 shrink-0 overflow-hidden border ${selectedImage === image ? 'border-primary ring-1 ring-primary' : 'border-border'}`}
-                >
-                  <img src={image} alt={`${product.name}-${index + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
+            <div className="relative mt-4 flex items-center gap-2">
+              {/* Left arrow */}
+              <button
+                onClick={() => scrollThumbnails('left')}
+                className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full border border-border bg-background hover:bg-muted transition-colors"
+                aria-label="Scroll thumbnails left"
+              >
+                <ChevronLeft size={16} />
+              </button>
+
+              {/* Thumbnail strip */}
+              <div
+                ref={thumbnailRef}
+                className="flex gap-2 overflow-x-auto pb-1 scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {galleryImages.map((image, index) => (
+                  <button
+                    key={`${image}-${index}`}
+                    type="button"
+                    onClick={() => setSelectedImage(image)}
+                    className={`aspect-[3/4] w-16 shrink-0 overflow-hidden border-2 transition-all duration-200 ${
+                      selectedImage === image
+                        ? 'border-primary ring-1 ring-primary scale-105'
+                        : 'border-border hover:border-foreground'
+                    }`}
+                  >
+                    <img src={image} alt={`${product.name}-${index + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+
+              {/* Right arrow */}
+              <button
+                onClick={() => scrollThumbnails('right')}
+                className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full border border-border bg-background hover:bg-muted transition-colors"
+                aria-label="Scroll thumbnails right"
+              >
+                <ChevronRight size={16} />
+              </button>
             </div>
           )}
         </div>
