@@ -6,7 +6,6 @@ import heroBanner from '@/assets/hero-banner.jpg';
 import { useEffect, useRef, useState } from 'react';
 import { Product } from '@/context/CartContext';
 import { getProducts, getSettings } from '@/lib/api';
-import { categories } from '@/data/products';
 
 interface HomeSettings {
   cover_title: string;
@@ -88,11 +87,34 @@ const Index = () => {
     if (!categorySettings) return fallback;
     const key = catName.toLowerCase();
     let apiImage = '';
-    if (key === 'men') apiImage = categorySettings.men_image;
-    else if (key === 'women') apiImage = categorySettings.women_image;
-    else if (key === 'kides') apiImage = categorySettings.kids_image;
+    if (key === 'men' || key === 'man') apiImage = categorySettings.men_image;
+    else if (key === 'women' || key === 'woman') apiImage = categorySettings.women_image;
+    else if (key === 'kides' || key === 'kids' || key === 'kid') apiImage = categorySettings.kids_image;
     return apiImage && apiImage.startsWith('http') ? apiImage : fallback;
   };
+
+  // Dynamically extract categories and count of items from loaded products
+  const dynamicCategories = (() => {
+    if (products.length === 0) return [];
+    
+    const counts: Record<string, number> = {};
+    const firstProductImage: Record<string, string> = {};
+
+    products.forEach((p) => {
+      if (p.category) {
+        counts[p.category] = (counts[p.category] || 0) + 1;
+        if (!firstProductImage[p.category] && p.image) {
+          firstProductImage[p.category] = p.image;
+        }
+      }
+    });
+
+    return Object.keys(counts).map((name) => ({
+      name,
+      count: counts[name],
+      image: firstProductImage[name] || '',
+    }));
+  })();
 
   return (
     <div>
@@ -188,35 +210,37 @@ const Index = () => {
 
 
       {/* Categories */}
-      <section className="container mx-auto px-4 py-20">
-        <h2 className="section-heading text-center mb-12">{t('shopByCategory')}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
-          {categories.map((cat) => (
-            <Link
-              key={cat.name}
-              to={`/categories?cat=${cat.name}`}
-              className="group relative overflow-hidden aspect-[3/4]"
-            >
-              <img
-                src={getCategoryImage(cat.name, cat.image)}
-                alt={cat.name}
-                loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.onerror = null;
-                  target.src = cat.image;
-                }}
-              />
-              <div className="absolute inset-0 bg-foreground/30 group-hover:bg-foreground/40 transition-colors" />
-              <div className="absolute bottom-6 left-6">
-                <h3 className="text-primary-foreground font-heading text-xl font-semibold">{cat.name}</h3>
-                <p className="text-primary-foreground/70 text-sm">{cat.count} {t('items')}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {dynamicCategories.length > 0 && (
+        <section className="container mx-auto px-4 py-20">
+          <h2 className="section-heading text-center mb-12">{t('shopByCategory')}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+            {dynamicCategories.map((cat) => (
+              <Link
+                key={cat.name}
+                to={`/categories?cat=${cat.name}`}
+                className="group relative overflow-hidden aspect-[3/4]"
+              >
+                <img
+                  src={getCategoryImage(cat.name, cat.image)}
+                  alt={cat.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    target.onerror = null;
+                    target.src = cat.image;
+                  }}
+                />
+                <div className="absolute inset-0 bg-foreground/30 group-hover:bg-foreground/40 transition-colors" />
+                <div className="absolute bottom-6 left-6">
+                  <h3 className="text-primary-foreground font-heading text-xl font-semibold uppercase">{cat.name}</h3>
+                  <p className="text-primary-foreground/70 text-sm">{cat.count} {t('items')}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Trending */}
       <section className="container mx-auto px-4 py-10">
